@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Edit Task</h2>
+
+<form method="POST">
+    <input type="text" name="title" value="{{ task[2] }}" required>
+    <input type="text" name="category" value="{{ task[3] }}">
+    <input type="date" name="deadline" value="{{ task[4] }}">
+    <select name="priority">
+        <option value="Low" {% if task[5] == 'Low' %}selected{% endif %}>Low</option>
+        <option value="Normal" {% if task[5] == 'Normal' %}selected{% endif %}>Normal</option>
+        <option value="High" {% if task[5] == 'High' %}selected{% endif %}>High</option>
+    </select>
+    <button type="submit">Save</button>
+</form>
+
+<p><a href="{{ url_for('dashboard') }}">← Back to Dashboard</a></p>
+{% endblock %}

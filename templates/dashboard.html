@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form method="GET" action="{{ url_for('dashboard') }}">
+  <label for="filter">Filter:</label>
+  <select name="filter" id="filter" onchange="this.form.submit()">
+    <option value="all" {% if filter == 'all' %}selected{% endif %}>All</option>
+    <option value="pending" {% if filter == 'pending' %}selected{% endif %}>Pending</option>
+    <option value="completed" {% if filter == 'completed' %}selected{% endif %}>Completed</option>
+  </select>
+</form>
+
+<h2>Your Tasks</h2>
+
+<form method="POST" action="{{ url_for('add_task') }}">
+    <input type="text" name="title" placeholder="Title" required>
+    <input type="text" name="category" placeholder="Category">
+    <input type="date" name="deadline">
+    <select name="priority">
+        <option value="Low">Low</option>
+        <option value="Normal" selected>Normal</option>
+        <option value="High">High</option>
+    </select>
+    <button type="submit">Add Task</button>
+</form>
+
+<hr>
+
+{% if tasks %}
+<ul>
+    {% for task in tasks %}
+        <li>
+            <form method="POST" action="{{ url_for('toggle_task', task_id=task[0]) }}" style="display:inline;">
+                <button type="submit" style="border:none; background:none; cursor:pointer;">
+                    {% if task[6] == 1 %}
+                        ✅
+                    {% else %}
+                        ❌
+                    {% endif %}
+                </button>
+            </form>
+
+            <strong>{{ task[2] }}</strong> ({{ task[3] }}) – Due: {{ task[4] }} | Priority: {{ task[5] }}
+
+            <a href="{{ url_for('edit_task', task_id=task[0]) }}">✏️</a>
+
+            <form method="POST" action="{{ url_for('delete_task', task_id=task[0]) }}" style="display:inline;">
+                <button type="submit" style="color:red; border:none; background:none; cursor:pointer;">🗑️</button>
+            </form>
+        </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No tasks yet. Add one above! 🙌</p>
+{% endif %}
+
+{% endblock %}
