@@ -1,5 +1,6 @@
 from flask import Flask,render_template,request,redirect,session,url_for
 import database
+import os
 
 app=Flask(__name__)
 app.secret_key="supersecretkey" #Needed for session
@@ -110,5 +111,7 @@ def edit_task(task_id):
 
     task=database.get_task_by_id(task_id)
     return render_template("edit_task.html",task=task)
+
 if __name__=="__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))  # Render asigna un puerto
+    app.run(host="0.0.0.0", port=port, debug=True)
